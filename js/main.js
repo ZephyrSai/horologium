@@ -901,6 +901,7 @@ function frame(now, manual) {
     if (!mov) { loadMovement(MOVEMENTS[0].id); sim.wind = 0.9; document.title = mode === 'gallery' ? 'Atlas · Horologium' : 'Horologium'; }
     bench.visible = false;
     if (mode === 'intro' && $('#intro').scrollTop > innerHeight * 1.2) return;   // hero off screen: save GPU
+    if (mode === 'intro' && $('#liveName').dataset.id !== spec.id) { $('#liveName').dataset.id = spec.id; $('#liveName').textContent = `Live: ${spec.name}, running in real time`; }
     const a = now / 11000;
     const R = mov.R, wide = innerWidth > 900;
     // place the movement centred in the space the hero copy leaves free, sized to fit it
