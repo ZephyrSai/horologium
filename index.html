@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Horologium</title>
+<meta name="description" content="An interactive atlas of mechanical watch movements: scroll to assemble each calibre part by part, then watch it run in real time with escapement sound and a live timegrapher.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<canvas id="gl"></canvas>
+
+<!-- ============ intro ============ -->
+<section id="intro" class="view hidden">
+  <div class="i-hero">
+    <div class="i-copy">
+      <div class="brand">Horologium</div>
+      <h1>How a mechanical watch keeps time, one wheel at a time.</h1>
+      <p class="lede">A spring, a handful of gears and a tiny wheel swinging back and forth several times a second. No battery, no chip, and yet it can stay within a few seconds a day. This is an interactive atlas of eleven movements, from an 18th-century verge to a modern tourbillon. You can take each one apart, put it back together, and watch and hear it run.</p>
+      <div class="i-cta">
+        <a class="cta" href="#/atlas">Explore the movements →</a>
+        <a class="cta ghost" href="#/m/unitas-6497">Start with the classic</a>
+      </div>
+      <div class="i-scroll">Scroll for the tour ↓</div>
+    </div>
+    <div class="i-live"><span class="dot"></span>Live: the 6497-type, running in real time</div>
+  </div>
+
+  <div class="i-band">
+    <div class="i-sec">
+      <div class="i-kicker">Inside every mechanical watch</div>
+      <h2>Five systems, one chain of energy</h2>
+      <p class="i-intro">Every watch on this site, from 1780 to today, is the same story told differently. Energy goes in at the crown and comes out as the hands moving. In between it is released in tiny, perfectly equal steps.</p>
+      <div class="i-steps">
+        <div class="i-step"><b>1</b><h3>Power</h3><p>A coiled steel <em>mainspring</em> inside a toothed <em>barrel</em>. Winding the crown stores roughly two days of energy.</p></div>
+        <div class="i-step"><b>2</b><h3>Transmission</h3><p>The <em>going train</em>: four or five gear pairs that turn hours into seconds. In the classic 6497, 80/12 × 60/10 × 70/8 × 15 teeth gives exactly 18,000 beats an hour.</p></div>
+        <div class="i-step"><b>3</b><h3>Distribution</h3><p>The <em>escapement</em>: a pallet fork with two ruby stones lets the escape wheel advance half a tooth at a time, and gives the balance a small push each time.</p></div>
+        <div class="i-step"><b>4</b><h3>Regulation</h3><p>The <em>balance wheel</em> and its <em>hairspring</em> swing back and forth 2.5 to 5 times a second. It takes the same time for big and small swings, and that is what keeps the time.</p></div>
+        <div class="i-step"><b>5</b><h3>Display</h3><p>Under the dial, the <em>motion works</em> turn the minute hand's one turn an hour into the hour hand's two turns a day, at a 12:1 ratio.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="i-band alt">
+    <div class="i-sec">
+      <div class="i-kicker">What you can do here</div>
+      <h2>Not a picture of a watch, a working one</h2>
+      <div class="i-grid">
+        <div class="i-feat"><h3>Watch it assemble</h3><p>Each movement opens as a tray of loose parts. Scroll, and they fly into place one at a time, with a short explanation of what each part does.</p></div>
+        <div class="i-feat"><h3>Turn it in your hands</h3><p>Rotate, zoom to the jewels, explode the layers, see through the bridges, and flip it over to the dial. Click any part to see its teeth, speed and material.</p></div>
+        <div class="i-feat"><h3>Wind it, set it</h3><p>Hold to wind and hear the ratchet click. Pull the crown and the balance stops, so you can set the hands. On automatics, the rotor swings as you turn the watch.</p></div>
+        <div class="i-feat"><h3>Slow time down</h3><p>At one-fiftieth speed you can follow the pallet fork unlocking, the impulse, and the drop onto the next stone. You can also hear the tick split into three separate clicks.</p></div>
+        <div class="i-feat"><h3>Time it</h3><p>A timegrapher like a watchmaker's bench tool shows rate, amplitude, beat error and drift in six positions. Turn the regulator to correct the rate, or watch a tourbillon average out its errors.</p></div>
+        <div class="i-feat"><h3>Compare eras</h3><p>Verge and fusee, the pocket chronometer, the Swiss lever, the co-axial, the tourbillon, the wandering hour and Spring Drive: five centuries of answers to the same problem.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="i-band">
+    <div class="i-sec">
+      <div class="i-kicker">The collection</div>
+      <h2>Eleven movements</h2>
+      <div id="introList" class="i-list"></div>
+      <div class="i-cta center"><a class="cta" href="#/atlas">Open the atlas →</a></div>
+    </div>
+  </div>
+
+  <footer class="i-foot">
+    <p><b>About the simulation.</b> Nothing here is hand-animated. Wheel sizes, centre distances, speeds and how the teeth mesh are all computed from each movement's tooth counts. The balance and escapement run as a time-based simulation, and the ticks are synthesised from the escapement's own timing. The 6497 and 2824 trains use published tooth counts. The others are constructed to give the correct beat rate. Calibres marked "type" recreate a class of movement, not any brand's design.</p>
+    <p>Built with three.js. Open it on a desktop browser with sound on for the full experience.</p>
+  </footer>
+</section>
+
+<!-- ============ gallery ============ -->
+<section id="gallery" class="view hidden">
+  <header class="g-head">
+    <a class="brand" href="#/">← Horologium</a>
+    <h1>An atlas of the mechanical watch</h1>
+    <p class="lede">Each movement starts as a tray of loose parts. Scroll, and it assembles itself — wheel by wheel, jewel by jewel — until the balance starts to swing. Then it's yours: turn it over, wind it, pull the crown, slow time down until you can hear the escapement's three clicks, and put it on a timegrapher.</p>
+  </header>
+  <div id="cards" class="cards"></div>
+  <footer class="g-foot">Geometry is generated from tooth counts and layouts in each movement file — the train ratios, beat rates and escapement timing are computed, not animated by hand. Calibres marked “type” are faithful recreations of a class of movement, not replicas of a brand’s design.</footer>
+</section>
+
+<!-- ============ story (scroll assembly) ============ -->
+<section id="story" class="view hidden">
+  <div class="topbar">
+    <a href="#/atlas" class="back">← Atlas</a>
+    <div class="tb-title" id="tbTitle"></div>
+    <div class="tb-right">
+      <button id="soundBtn" class="pill">🔇 Sound off</button>
+      <button id="skipBtn" class="pill accent">Explore now →</button>
+    </div>
+  </div>
+  <div id="chapters" class="chapters"></div>
+  <div class="progress"><div id="progBar"></div></div>
+</section>
+
+<!-- ============ explorer ============ -->
+<section id="explorer" class="view hidden">
+  <div class="topbar">
+    <a href="#/atlas" class="back">← Atlas</a>
+    <div class="tb-title" id="exTitle"></div>
+    <div class="tb-right">
+      <button id="replayBtn" class="pill">↺ Replay assembly</button>
+      <button id="soundBtn2" class="pill">🔇 Sound off</button>
+    </div>
+  </div>
+
+  <aside class="panel left" id="leftPanel">
+    <div class="sect">
+      <h4>Time</h4>
+      <div class="seg" id="speedSeg">
+        <button data-s="0">❚❚</button><button data-s="0.02">1/50</button><button data-s="0.1">1/10</button><button data-s="1" class="on">1×</button><button data-s="60">60×</button><button data-s="3600">1 h/s</button>
+      </div>
+      <div class="clock">
+        <div><span class="k">Watch</span><span id="watchTime" class="v mono">--:--:--</span></div>
+        <div><span class="k">Reference</span><span id="refTime" class="v mono">--:--:--</span></div>
+      </div>
+    </div>
+    <div class="sect">
+      <h4>Crown</h4>
+      <div class="seg" id="crownSeg"><button data-c="0" class="on">Wind</button><button data-c="2">Pull · set</button></div>
+      <button id="windBtn" class="big">Hold to wind ⟳</button>
+      <div id="setRow" class="hidden">
+        <label class="small">Drag to set the hands</label>
+        <input type="range" id="setSlider" min="-100" max="100" value="0">
+      </div>
+      <div class="gauge"><span class="k">Power reserve</span><div class="bar"><div id="reserveBar"></div></div><span id="reserveTxt" class="mono small"></span></div>
+      <div id="wristRow" class="hidden"><label class="chk"><input type="checkbox" id="wristChk"> On the wrist (rotor swings)</label><p class="hint">The rotor also falls toward the bottom of your screen as you turn the watch.</p></div>
+    </div>
+    <div class="sect">
+      <h4>View</h4>
+      <div class="grid2">
+        <button data-view="back" class="vbtn">Caseback</button>
+        <button data-view="dial" class="vbtn">Dial</button>
+        <button data-view="esc" class="vbtn">Escapement</button>
+        <button data-view="side" class="vbtn">Profile</button>
+      </div>
+      <label class="small">Explode</label>
+      <input type="range" id="explode" min="0" max="100" value="0">
+      <label class="chk"><input type="checkbox" id="xray"> X-ray bridges & barrel</label>
+      <label class="chk"><input type="checkbox" id="dialChk" checked> Dial & hands</label>
+      <label class="chk"><input type="checkbox" id="rotorChk" checked> Rotor</label>
+      <label class="chk"><input type="checkbox" id="autoRot"> Turntable</label>
+    </div>
+    <div class="sect">
+      <h4>Sound</h4>
+      <input type="range" id="vol" min="0" max="100" value="70">
+      <label class="chk"><input type="checkbox" id="stetho"> Stethoscope (×2 gain)</label>
+      <p class="hint">At 1/10 and 1/50 speed each tick splits into unlock · impulse · drop.</p>
+    </div>
+  </aside>
+
+  <aside class="panel right" id="rightPanel">
+    <div class="sect" id="infoSect">
+      <h4>Inspector</h4>
+      <div id="info"><p class="hint">Click any part. Double-click to fly to it.</p></div>
+    </div>
+    <div class="sect">
+      <h4>Timegrapher</h4>
+      <canvas id="tg" width="640" height="220"></canvas>
+      <div class="tgnums">
+        <div><span class="k">Rate</span><span id="tgRate" class="v mono"></span></div>
+        <div><span class="k">Amplitude</span><span id="tgAmp" class="v mono"></span></div>
+        <div><span class="k">Beat error</span><span id="tgBE" class="v mono"></span></div>
+        <div><span class="k">Beat rate</span><span id="tgBph" class="v mono"></span></div>
+        <div><span class="k">Lift angle</span><span id="tgLift" class="v mono"></span></div>
+        <div><span class="k">Beats</span><span id="tgBeats" class="v mono"></span></div>
+        <div class="wide"><span class="k">Drift vs reference</span><span id="tgDrift" class="v mono"></span></div>
+      </div>
+      <div class="seg small" id="posSeg"></div>
+      <label class="small">Regulator index <span id="regTxt" class="mono"></span></label>
+      <input type="range" id="regSlider" min="-60" max="60" value="0">
+    </div>
+    <div class="sect">
+      <h4>Going train</h4>
+      <div id="trainCalc" class="mono small"></div>
+    </div>
+  </aside>
+</section>
+
+<div id="tooltip" class="tooltip hidden"></div>
+<div id="loading" class="loading"><div class="spinner"></div><div>Turning the parts…</div></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

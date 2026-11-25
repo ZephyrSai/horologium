@@ -1,0 +1,46 @@
+// 16½‴ hand-wound pocket calibre, 6497 type (open-face "Lépine": seconds in line with the crown).
+// Going train from a measured 6498-1: barrel 88, centre 80/12, third 60/10, fourth 70/8,
+// escape 15/7 → 600 rev/h × 15 × 2 = 18,000 vph. Motion works 12/36 × 10/40 = 12.
+export default {
+  id: 'unitas-6497',
+  name: 'Calibre 6497-type',
+  subtitle: '16½‴ hand-wound Lépine pocket calibre',
+  category: 'Foundations',
+  era: '1950 →',
+  blurb: 'The big, honest workhorse every watchmaking student takes apart first. Everything is large enough to see: a 14 mm screw-less Glucydur balance, a swan-neck regulator, a 15-tooth escape wheel ticking five times a second.',
+  swatch: ['#dfe3e8', '#3a4048'],
+  story: [
+    'Designed by Unitas in the 1950s for pocket watches and still made today, it is the movement inside most "big" hand-wound watches and nearly every watchmaking school\'s bench.',
+    'Its going train is a textbook: four meshes from barrel to escape wheel, every ratio a round number. Seconds run on the fourth wheel at nine o\'clock, in line with the crown.',
+  ],
+  specs: { diameter: 36.6, height: 4.5, jewels: 17, vph: 18000, reserve: 46, lift: 50, amplitude: 290, escapementText: 'Swiss lever, 15 club teeth' },
+  escapement: 'lever',
+  hacking: false,
+  look: {
+    plate: { metal: 'rhodium', finish: 'perlage', finishScale: 1.7 },
+    bridges: { metal: 'rhodium', finish: 'cotes', finishScale: 3.0, finishAngle: 0.5 },
+    wheels: 'goldWheel', screws: 'blued', balance: 'glucydur', hairspring: 'nivarox',
+    ratchet: { metal: 'steel', finish: 'snail', finishScale: 11, finishCentered: true },
+  },
+  plate: { R: 18.3, thick: 1.4 },
+  train: [
+    { id: 'barrel', name: 'Mainspring barrel', type: 'barrel', at: [-3.265, 8.969], wheel: { teeth: 88, r: 8.39 }, z: 0.6, h: 2.0, springTurns: 14 },
+    { id: 'center', name: 'Centre wheel', from: 'barrel', dir: 290, rph: 1, wheel: { teeth: 80, r: 6.03, spokes: 4 }, pinion: { leaves: 12 }, z: 0.15,
+      desc: 'Turns exactly once an hour. Its arbor runs through the plate to the dial side, where the cannon pinion and minute hand ride on it.' },
+    { id: 'third', name: 'Third wheel', from: 'center', dir: -20, wheel: { teeth: 60, r: 4.13 }, pinion: { leaves: 10 }, z: 0.55,
+      desc: 'An intermediate wheel: the centre wheel\'s 80 teeth drive its 10-leaf pinion, so it turns 8 times an hour.' },
+    { id: 'fourth', name: 'Fourth (seconds) wheel', from: 'third', dir: 60, wheel: { teeth: 70, r: 4.05 }, pinion: { leaves: 8 }, z: 0.95,
+      desc: 'Turns once a minute (60:8 × 80:10 = 60). Its arbor carries the small-seconds hand at nine o\'clock.' },
+    { id: 'escape', name: 'Escape wheel', from: 'fourth', dir: -80, pinion: { leaves: 7 }, escapement: { type: 'lever', teeth: 15, r: 3.17, dir: -130, z: 1.4, balanceZ: 1.9, cockDir: 188, swanNeck: true } },
+  ],
+  balance: { r: 7.0, arms: 2, rimH: 0.4, coils: 13, hsR: 4.2 },
+  bridges: [
+    { id: 'barrelBridge', name: 'Barrel bridge', covers: ['barrel'], padR: 3.2, extra: [[-12.5, 9.5, 3.2], [-2, 15.6, 2.0]], z: 2.7, thick: 0.9, screwCount: 3, engraving: 'Seventeen jewels' },
+    { id: 'trainBridge', name: 'Train bridge', covers: ['center', 'third', 'escape', 'fourth'], padR: 2.5, extra: [[14.5, 4.5, 2.6]], z: 2.4, thick: 0.9, screwCount: 3, waist: 0.12 },
+    { id: 'palletCock', name: 'Pallet cock', covers: ['pallet'], padR: 1.3, extra: [[11.2, -9.6, 1.6]], z: 2.4, thick: 0.7, screwCount: 1 },
+  ],
+  motionWorks: { cannon: 12, minute: 36, minutePinion: 10, hour: 40, dir: 215 },
+  keyless: { crownAngle: 180, ratchet: 56, crownWheel: 35, z: 3.62, ratchetR: 5.6, crownR: 2.8 },
+  dial: { color: '#f5f1e8', numerals: 'roman', hands: 'breguet', handMat: 'blued', subSeconds: 'fourth', subR: 3.6, handW: 0.75, brand: 'HOROLOGIUM', subtitle: 'SEVENTEEN JEWELS', story: 'Small seconds at nine o\'clock sit directly over the fourth wheel. The hands are Breguet "pomme" hands, heat-blued to a cornflower blue at about 290 °C.' },
+  regulation: { DU: 3, DD: 4, CU: -6, CD: -9, CL: -4, CR: -2, beatError: 0.5 },
+};
